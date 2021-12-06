@@ -28,7 +28,7 @@ def setDateTime(datetime):
 
 df['publishedTime'] = df.apply(lambda x: setDateTime(x['publishedTime']), axis=1)
 df['publishedTime'] = pd.to_datetime(df['publishedTime'], format='%Y-%m-%d %H:%M:%S')
-# 只保留年份信息
+# only keep year
 df['publishedTime'] = df.apply(lambda x: x['publishedTime'].year, axis=1)
 
 
