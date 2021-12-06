@@ -1,24 +1,25 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import sklearn as sk
 from sklearn.linear_model import LinearRegression, Lasso
 
-# 设置网站的基本属性
+# set web
 st.set_page_config(
     page_title="BusinessCourseDataAnalysis",
     layout="wide",
     initial_sidebar_state="auto",
 )
-# 读取文件
-df = pd.read_csv("data/BusinessFinance.csv")
+# read data files
+df = pd.read_csv("BusinessFinance.csv")
 df_initial = df.copy(deep=True)
 
-# 删除不需要的列
+# deal columns
 df.columns = df.columns
 df.drop(df.columns[[0, 1, 2, 3, 11, 12, 13, 14, 15]], axis=1, inplace=True)
 
 
-# 处理发行时间
+# deal publishedTime
 def setDateTime(datetime):
     times = datetime.split('T')
     times[1] = times[1][:-1]
@@ -31,7 +32,7 @@ df['publishedTime'] = pd.to_datetime(df['publishedTime'], format='%Y-%m-%d %H:%M
 df['publishedTime'] = df.apply(lambda x: x['publishedTime'].year, axis=1)
 
 
-# 处理课程时间
+# deal course time
 def setContentInfo(datetime):
     times = datetime.split()
     if len(times) == 1:
@@ -46,43 +47,28 @@ def setContentInfo(datetime):
 
 
 df['contentInfo'] = df.apply(lambda x: setContentInfo(x['contentInfo']), axis=1)
-# 处理价格
+# deal price
 df = df.replace('Free', '0')
 df['price'].astype('int')
 
 
-
-# 设置页面的左部分框
 analysis = st.sidebar.selectbox('Option', ['Data preprocessing', 'Visualization', 'Sklearn Predict','References and Link'])
 st.write("# " + analysis)
 
 if analysis == 'Data preprocessing':
 
-    # 由换条选择展示的数据量
-    # 原始数据
     num = st.slider('num', 0, len(df_initial))
     st.write(f"You have selected {num} inital data to show")
     st.write(df_initial.head(num))
-    # 预处理后的数据
     num_2 = st.slider('num_2', 0, len(df))
     st.write(f"You have selected {num_2} Preprocessed data to show")
     st.write(df.head(num_2))
 
 elif analysis == 'Visualization':
-    # 数据可视化,
-    #st.write(f"Let's look at simple chart")
-    #chart = alt.Chart(df_initial).mark_bar().encode(
-    #    x="instructionalLevel",
-    #    y="count()",
-    #    color=alt.Color('count()', scale=alt.Scale(scheme='turbo', reverse=True)),
-    #)
-    #st.altair_chart(chart, use_container_width=True)
-
     st.write("## The first topic we want to explore is:Which year has the most courses published?")
     df_year = df.copy(deep=True)
     df_year['publishedTime'] = df_year['publishedTime'].astype("str")
     st.write(df.head())
-    st.write(df.loc[97:100, :])
     chart_1 = alt.Chart(df_year).mark_bar().encode(
         x="publishedTime",
         y="count()",
@@ -95,8 +81,6 @@ elif analysis == 'Visualization':
     st.write("## The second topic we want to explore is:With the passage of time, what is the law of the change in "
              "the number of courses released for all levels?")
 
-    #df_level = df.groupby(['publishedTime'])['instructionalLevel'].value_counts().unstack()
-    #df_level = df_level.fillna(0)
     chart_2 = alt.Chart(df).mark_line(point=True).encode(
         x="publishedTime",
         y="count()",
@@ -108,9 +92,9 @@ elif analysis == 'Visualization':
              "decline in All Level courses, and the latest decline in Expert Level courses.")
 
 elif analysis == 'Sklearn Predict':
-    # 机器学习分析
+    # ML
     st.write(f"Let's look at ML how to deal this data")
-    # 数值化instructionalLevel
+    # value instructionalLevel
     level = {"Intermediate Level": 2, "Beginner Level": 1, "Expert Level": 3, "All Levels": 0}
     df['instructionalLevel'] = df.apply(lambda x: level[x['instructionalLevel']], axis=1)
 
@@ -148,10 +132,10 @@ elif analysis == 'Sklearn Predict':
              "is not ideal, and more detailed processing of the data set or the use of other more effective machine "
              "learning models are required.")
 elif analysis == 'References and Link':
-    st.write("GitHub:")
-    st.write("This portion of the app was taken from [https://altair-viz.github.io/index.html]")
-    st.write("This portion of the app was taken from ["
-             "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html]")
+    st.write("GitHub: https://github.com/yuanchai9/BusinessCourseDataAnalysis")
+    st.write("This portion of the app was taken from https://altair-viz.github.io/index.html")
+    st.write("This portion of the app was taken from "
+             "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html")
 
 
 
