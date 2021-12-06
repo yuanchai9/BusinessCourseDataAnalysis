@@ -91,6 +91,14 @@ elif analysis == 'Visualization':
              "decreased. The difference is that the time nodes for the decline occur first, followed by the first "
              "decline in All Level courses, and the latest decline in Expert Level courses.")
 
+    chart_3 = alt.Chart(df).mark_circle().encode(
+        x="numSubscribers",
+        y="contentInfo",
+        color=alt.Color('instructionalLevel', scale=alt.Scale(scheme='turbo')),
+        tooltip=["price", "contentInfo"],
+    )
+    st.altair_chart(chart_3, use_container_width=True)
+
 elif analysis == 'Sklearn Predict':
     # ML
     st.write(f"Let's look at ML how to deal this data")
