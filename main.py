@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-import sklearn as sk
+#import sklearn as sk
 from sklearn.linear_model import LinearRegression, Lasso
 
 # set web
