@@ -144,6 +144,13 @@ elif analysis == 'References and Link':
     st.write("This portion of the app was taken from https://altair-viz.github.io/index.html")
     st.write("This portion of the app was taken from "
              "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html")
+    st.write("This portion of the app was taken from "
+             "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html"
+             "#sklearn.model_selection.train_test_split")
+    st.write("This portion of the app was taken from "
+        "https://docs.streamlit.io/library/api-reference/layout/st.sidebar")
+    st.write("This portion of the app was taken from "
+        "https://pandas.pydata.org/docs/reference/index.html")
 
 
 
